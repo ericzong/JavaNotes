@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>文件路径相关方法小结</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+<link type="text/css" rel="stylesheet" href="../css/tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/highlight.css" />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  <h1>文件路径方法</h1>
+  <p>常用的获取文件路径的方法有：</p>
+  <ul>
+    <li><p>File.getPath()</p></li>
+    <li><p>File.getAbsolutePath()</p></li>
+    <li><p>File.getCanonicalPath()</p></li>
+  </ul>
+  
+  <h1>相对路径 vs. 绝对路径</h1>
+  <p>如果创建 File 对象时使用的是不包含“.”和“..”的绝对路径字符串表示，那么 3 个方法返回的路径都是相同的。</p>
+  <p>使用相对路径字符串表示创建的 File 对象，其起始路径跟工作目录有关。</p>
+  
+  <h1>差别</h1>
+  <p>当使用相对路径的字符串表示创建 File 对象，3 个方法的返回值是有部分差异的，下面我们一一说明。</p>
+  <p>由于是相对路径，所以我们先假设工作目录为 C:/test。</p>
+  
+  <h2>普通相对路径</h2>
+  <pre class="code"><code>
+File file = new File("abc");
+file.getPath();		// abc
+file.getAbsolutePath();	// C:/test/abc
+file.getCanonicalPath();// C:/test/abc </code></pre>
+  
+  <h2>带“.”的相对路径</h2>
+  <pre class="code"><code>
+File file = new File(".");
+file.getPath();		 // .
+file.getAbsolutePath();  // C:/test/.
+file.getCanonicalPath(); // C:/test </code></pre>
+
+  <h2>带“..”的相对路径</h2>
+  <pre class="code"><code>
+File file = new File("..");
+file.getPath();		 // ..
+file.getAbsolutePath();  // C:/test/..
+file.getCanonicalPath(); // C:/ </code></pre>
+
+  <h1>小结</h1>
+  <ul>
+    <li><p>File.getPath()：返回 File 对象创建时使用的路径字符串。</p></li>
+    <li><p>File.getAbsolutePath()：返回绝对路径字符串，但可能包含“.”或“..”。</p></li>
+    <li><p>File.getCanonicalPath()：返回规范的绝对路径字符串，不会包含“.”和“..”。注意，会抛出 IOException。</p></li>
+  </ul>
+  
+</body>
+</html>

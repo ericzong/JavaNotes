@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>Java编程规范</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  <h1>前言</h1>
+  <h2>范围</h2>
+  <p>本规范规定了使用Java语言编程时排版、注释、命名和编码的规则和建议。</p>
+  <p>如无特别说明，本文中提到的开发工具默认指 Eclipse。</p>
+  <h2>术语和定义</h2>
+  <p>规则：编程时强制必须遵守的原则。</p>
+  <p>建议：编程时必须加以考虑的原则。</p>
+  <p>格式：对此规范格式的说明。</p>
+  <p>说明：对此规范或建议进行必要的解释。</p>
+  <p>示例：对此规范或建议从正、反两个方面给出例子。</p>
+  
+  <h1>排版规范</h1>
+  <h2>规则</h2>
+  <h3>缩进</h3>
+  <p>程序块要采用缩进风格编写，并使用空格缩进代码行，缩进的空格数为4个。</p>
+  <p>被大括号包围的代码块相对于大括号应增加一个缩进，这包括类型体、方法体等。</p>
+  <p>switch 的 case 和 default 子句中的代码块，应增加一个缩进。</p>
+  <div class="textarea">
+    说明：case 和 default 子句中的代码一般不会使用大括号括起来，但仍应该缩进。
+  </div>
+  <h3>大括号</h3>
+  <p>大括号总应独占一行，除非是出现在数组初始化器中。</p>
+  <h3>小括号</h3>
+  <p>小括号不应独占一行，应与其所在的语句上下文同在一行中。</p>
+  <h3>空格</h3>
+  <p>“,”（逗号）之后，应插入一个空格。包括实现多个接口、同时声明多个变量、参数列表等。</p>
+  <p>单目操作符与操作数之间不应插入空格。</p>
+  <p>双目操作符前后应插入一个空格。包括 for-each 循环中的“:”（冒号）。</p>
+  <p>三目操作符各符号前后应插入一个空格。</p>
+  <p>一行代码中，非行尾“;”（分号）后应插入一个空格。包括 for 循环、TWR 等。</p>
+  <p>数组初始化器中开始大括号后以及结束大括号前应分别插入一个空格。</p>
+  <h3>空白行</h3>
+  <p>包声明之后 import 语句之前插入。</p>
+  <p>import 分组间插入。</p>
+  <div class="textarea">
+    说明：一般导入的包按Java原生包、第三方工具包、自定义包分为三组。
+  </div>
+  <p>import 语句之后插入。</p>
+  <p>类型声明间插入。</p>
+  <p>不同类型成员分组间插入。</p>
+  <p>空白行应是单行，不应有连续空白行。</p>
+  <h3>新行</h3>
+  <p>大括号导致的新行规则参考前文“大括号”规范。</p>
+  <p>除参数列表中的注解外，其它注解后插入新行。</p>
+  <h3>换行</h3>
+  <p>单行源代码长度超过一定字符数（默认为80，推荐120）应当换行，新起的行增加2个缩进。</p>
+  <h3>注释</h3>
+  <p>注释行长度超过120字符应当换行。</p>
+  <p>文档注释中 Javadoc 标签前应插入空白行。</p>
+  <p>文档注释中 Javadoc 标签部分增加一个缩进。</p>
+  <p>文档注释中，&#64;param &lt;参数&gt; 后应换行。</p>
+  <p>即使文档注释内容只有一行，“/**”和“*/”也应分别独占一行。</p>
+  <h3>分行</h3>
+  <p>不允许把多个短语句写在一行中，即一行只写一条语句。</p>
+  <p>示例：</p>
+  <p>反例如下：</p>
+  <pre class="code">
+LogFilename now = null;        LogFilename that = null; </pre>
+  <p>规范代码如下：</p>
+  <pre class="code">
+LogFilename now = null;
+LogFilename that = null; </pre>
+  <h2>建议</h2>
+  <h3>类成员排序</h3>
+  <p>类属性和类方法不要交叉放置，不同存取范围的属性或者方法也尽量不要交叉放置。</p>
+  <p>格式：</p>
+  <pre class="code">
+类定义
+{
+    类的公有属性定义
+    类的保护属性定义
+    类的私有属性定义
+    类的公有方法定义
+    类的保护方法定义
+    类的私有方法定义
+}</pre>
+  <h3>空白行</h3>
+  <p>文件末尾插入一空白行。</p>
+  <h3>switch 语句块</h3>
+  <p>switch 中 case 或 default 子句中的代码过多，应使用大括号括起来。</p>
+  
+  <h1>注释规范</h1>
+  <h2>规则</h2>
+  <h3>注释的编写</h3>
+  <p>边写代码边注释，修改代码同时修改相应的注释，以保证注释与代码的一致性。不再有用的注释要删除。</p>
+  <p>注释的内容要清楚、明了，含义准确，防止注释二义性。</p>
+  <div class="textarea">
+    说明：错误的注释不但无益反而有害。
+  </div>
+  <p>避免在注释中使用缩写，特别是不常用缩写。</p>
+  <div class="textarea">
+    	说明：在使用缩写时或之前，应对缩写进行必要的说明。
+  </div>
+  <h3>类型注释</h3>
+  <p>类的注释主要是一句话功能简述、功能详细描述。</p>
+  <div class="textarea">
+    说明：可根据需要列出：版本号、生成日期、作者、内容、功能、与其它类的关系等。
+  </div>
+  <p>格式：</p>
+  <pre class="code">
+/**
+ * 〈一句话功能简述〉
+ * 〈功能详细描述〉
+ * @author     [作者]
+ * @version   [版本号, YYYY-MM-DD]
+ * @see         [相关类/方法]
+ * @since      [产品/模块版本] 
+ * @deprecated
+ */</pre>
+  <h3>成员注释</h3>
+  <p>成员变量注释内容：成员变量的意义、目的、功能，可能被用到的地方。</p>
+  <p>成员方法注释内容：列出方法的一句话功能简述、功能详细描述、输入参数、输出参数、返回值、异常等。</p>
+  <div class="textarea">
+  	说明：异常注释用 @exception 或 @throws 表示，在JavaDoc中两者等价，但推荐用 @exception 标注 Runtime 异常，@throws 标注非 Runtime 异常。异常的注释必须说明该异常的含义及什么条件下抛出该异常。
+  </div>
+  <p>格式：</p>
+  <pre class="code">
+/**
+* 〈一句话功能简述〉
+* 〈功能详细描述〉
+* @param [参数1] [参数1说明]
+* @param [参数2] [参数2说明]
+* @return [返回类型说明]
+* @exception/throws [异常类型] [异常说明]
+* @see [类、类#方法、类#成员]
+* @deprecated
+*/</pre>
+  <h3>注释位置</h3>
+  <p>注释应与其描述的代码相近，对代码的注释应放在其上方或右方（对单条语句的注释）相邻位置，不可放在下面，如放于上方则需与其上面的代码用空行隔开。</p>
+  <h3>必要注释</h3>
+  <p>局部变量名不能很好描述自身用途时，应当添加注释详加描述。</p>
+  <p>条件分支、循环语句等涉及复杂逻辑时，应当添加注释说明。</p>
+  <p>对于switch语句下的case语句，如果因为特殊情况需要处理完一个case后进入下一个case处理，必须在该case语句处理完、下一个case语句前加上明确的注释。</p>
+  <div class="textarea">
+    说明：这样比较清楚程序编写者的意图，有效防止无故遗漏break语句。
+  </div>
+  <h2>建议</h2>
+  <h3>避免内部注释</h3>
+  <p>避免在一行代码或表达式的中间插入注释。</p>
+  <div class="textarea">
+    说明：除非必要，不应在代码或表达中间插入注释，否则容易使代码可读性变差。
+  </div>
+  <h3>注释应有用</h3>
+  <p>在代码的功能、意图层次上进行注释，提供有用、额外的信息。</p>
+  <div class="textarea">
+    说明：注释的目的是解释代码的目的、功能和采用的方法，提供代码以外的信息，帮助读者理解代码，防止没必要的重复注释信息。
+  </div>
+  <p>示例：</p>
+  <p>如下注释意义不大。</p>
+  <pre class="code">
+// 如果 receiveFlag 为真
+if (receiveFlag) </pre>
+  <p>	而如下的注释则给出了额外有用的信息。</p>
+  <pre class="code">
+// 如果从连结收到消息 
+if (receiveFlag)</pre>
+  <h3>标记代码块结束</h3>
+  <p>在代码块的结束行右方加注释标记，以表明某程序块的结束。</p>
+  <div class="textarea">
+    	说明：当代码段较长，特别是多重嵌套时，这样做可以使代码更清晰，更便于阅读。
+  </div>
+  <p>示例：</p>
+  <pre class="code">
+if (...)
+{
+    program code1
+
+    while (index &lt; MAX_INDEX)
+    {
+       program code2
+    } // end of while (index &lt; MAX_INDEX)  // 指明该条while语句结束
+} // end of  if (...) // 指明是哪条if语句结束 </pre>
+  <h3>中文注释</h3>
+  <p>注释尽量使用中文注释和中文标点。</p>
+  <h3>流程说明</h3>
+  <p>顺序实现流程的说明使用1、2、3、4在每个实现步骤部分的代码前面进行注释。</p>
+  <p>示例（对设置属性的流程注释）：</p>
+  <pre class="code">
+//1、 判断输入参数是否有效。
+......
+// 2、设置本地变量。
+......</pre>
+  <h3>复杂算法说明</h3>
+  <p>一些复杂的代码需要说明。</p>
+  <p>示例（对闰年算法的说明）：</p>
+  <pre class="code">
+//1. 如果能被4整除，是闰年；
+//2. 如果能被100整除，不是闰年.；
+//3. 如果能被400整除，是闰年.。
+</pre>
+
+  <h1>命名规范</h1>
+  <h2>规则</h2>
+  <h3>包名</h3>
+  <p>包名采用域后缀倒置的加上自定义的包名，采用小写字母。</p>
+  <h3>类型名</h3>
+  <p>使用意义完整的英文描述，每个英文单词的首字母使用大写、其余字母使用小写的大小写混合法。</p>
+  <p>示例：</p>
+  <div class="textarea">
+    OrderInformation, CustomerList, LogManager, LogConfig, SmpTransaction
+  </div>
+  <h3>属性名</h3>
+  <p>属性名使用意义完整的英文描述：第一个单词的字母使用小写、剩余单词首字母大写其余字母小写的大小写混合法。属性名不能与方法名相同。</p>
+  <p>示例：</p>
+  <pre class="code">
+private customerName;
+private orderNumber;
+private smpSession;</pre>
+  <h3>常量名</h3>
+  <p>常量名使用全大写的英文描述，英文单词之间用下划线分隔开，并且使用 final static 修饰。</p>
+  <p>示例：</p>
+  <pre class="code">
+public final static int MAX_VALUE = 1000;
+public final static String DEFAULT_START_DATE = "2001-12-08";
+</pre>
+  <h3>方法名</h3>
+  <p>方法名使用意义完整的英文描述：第一个单词的字母使用小写、剩余单词首字母大写其余字母小写的大小写混合法。</p>
+  <p>示例：</p>
+  <pre class="code">
+private void calculateRate();
+public void addNewOrder();</pre>
+  <h3>setter 和 getter 方法名</h3>
+  <p>方法中，存取属性的方法采用setter 和 getter方法，动作方法采用动词和动宾结构。</p>
+  <p>格式：</p>
+  <pre class="textarea">
+get + 非布尔属性名()
+is + 布尔属性名()
+set + 属性名()
+动词()
+动词 + 宾语()
+</pre>
+  <p>示例：</p>
+  <pre class="code">
+public String getType();
+public boolean isFinished();
+public void setVisible(boolean);
+public void show();
+public void addKeyListener(Listener);
+</pre>
+  <h2>建议</h2>
+  <h3>常用命名</h3>
+  <p>常用组件类的命名以组件名加上组件类型名结尾。</p>
+  <p>示例：</p>
+  <pre class="textarea">
+Application 类型的，命名以App 结尾——MainApp
+Frame 类型的，命名以Frame 结尾——TopoFrame
+Panel 类型的，建议命名以Panel 结尾——CreateCircuitPanel
+Bean 类型的，建议命名以Bean 结尾——DataAccessBean
+EJB 类型的，建议命名以EJB 结尾——DBProxyEJB
+Applet 类型的，建议命名以Applet 结尾——PictureShowApplet</pre>
+  <h3>缩写</h3>
+  <p>如果命名超过15 个字母，可采用以去掉元音字母的方法或者以行业内约定俗成的缩写方式缩写命名。</p>
+  <p>示例：</p>
+  <div class="textarea">
+    getCustomerInformation()  改为  getCustomerInfo()
+  </div>
+  <h3>集合命名</h3>
+  <p>含有集合意义的属性命名，尽量包含其复数的意义。</p>
+  <p>示例：</p>
+  <div class="textarea">
+    customers,  orderItems
+  </div>
+  
+  <h1>编码规范</h1>
+  <h2>规则</h2>
+  <h3>单一职责</h3>
+  <p>明确类的功能，精确（而不是近似）地实现类的设计。一个类仅实现一组相近的功能。</p>
+  <div class="textarea">
+    说明：划分类的时候，应该尽量把逻辑处理、数据和显示分离，实现类功能的单一性。
+  </div>
+  <p>示例：</p>
+  <pre class="textarea">
+数据类不能包含数据处理的逻辑。
+通信类不能包含显示处理的逻辑。</pre>
+  <h3>最小化可访问性</h3>
+  <p>类和成员的可访问性应该尽可能严格，即 private、default/friendly、protected、public 四种访问权限应首选靠前的。</p>
+  <h3>重写 toString()</h3>
+  <p>所有的数据类必须重写 toString() 方法，返回该类有意义的内容。</p>
+  <div class="textarea">
+    说明： 父类如果实现了比较合理的toString() ，子类可以继承不必再重写。
+  </div>
+  <h3>重写 equals()</h3>
+  <p>应同时重写 equals 与 hashCode，否则该类将不能与基于散列的集合一起正常运作。</p>
+  <h3>不要使用原生类型</h3>
+  <p>不应使用泛型类的原生类型形式。</p>
+  <div class="textarea">
+    说明：原生类型允许使用任意类型的类型参数，这将使编译时的类型检查不再有效，进而将一个编程错误的发现从编译时推迟到运行时。
+  </div>
+  <h3>消除警告</h3>
+  <p>源代码中不应存在警告，编码过程中应处理所有警告。</p>
+  <div class="textarea">
+    说明：警告表示代码存在出现某种错误的可能性，应该仔细地检查处理，如果确定不会出现相关问题，应使用注解抑制警告。
+  </div>
+  <h3>忽略异常需记日志</h3>
+  <p>异常捕获后，如果不对该异常进行处理，则应该纪录日志，并注释说明忽略异常的原因。</p>
+  <h3>定义详细异常信息</h3>
+  <p>自己抛出的异常必须要填写详细的描述信息。</p>
+  <div class="textarea">
+    说明：便于问题定位。
+  </div>
+  <h3>不依赖运算符优先级</h3>
+  <p>注意运算符的优先级，并用括号明确表达式的操作顺序，避免使用默认优先级。</p>
+  <div class="textarea">
+    说明：防止阅读程序时产生误解，防止因默认的优先级与设计思想不符而导致程序出错。
+  </div>
+  <h3>避免魔幻数字</h3>
+  <p>避免使用不易理解的数字，用有意义的标识来替代。涉及物理状态或者含有物理意义的常量，不应直接使用数字，必须用有意义的静态变量来代替。</p>
+  <p>示例（如下的程序可读性差）：</p>
+  <pre class="code">
+if (state == 0)
+{
+    state = 1;
+    ...  // program code
+}</pre>
+  <p>	应改为如下形式：</p>
+  <pre class="code">
+private final static int TRUNK_IDLE = 0;
+private final static int TRUNK_BUSY = 1;
+private final static int TRUNK_UNKNOWN = -1;
+
+if (state == TRUNK_IDLE)
+{
+    state = TRUNK_BUSY;
+    ...  // program code
+}</pre>
+  <h3>数组声明</h3>
+  <p>数组声明的时候使用 int[] index ，而不要使用 int index[] 。</p>
+  <div class="textarea">
+    说明：使用int index[] 格式使程序的可读性较差。
+  </div>
+  <h3>调试信息输出</h3>
+  <p>调试代码的时候，不要使用 System.out 和 System.err 进行打印，应该使用一个包含统一开关的测试类进行统一打印。</p>
+  <div class="textarea">
+    说明：代码发布的时候可以统一关闭调试代码，定位问题的时候又可以打开开关。
+  </div>
+  <h2>建议</h2>
+  <h3>异常信息提取</h3>
+  <p>记录异常不要保存exception.getMessage()，而要记录exception.toString()。</p>
+  <p>示例：</p>
+  <div class="textarea">
+    NullPointException抛出时常常描述为空，这样往往看不出是出了什么错。
+  </div>
+  <h3>抛出异常数量限制</h3>
+  <p>一个方法不应抛出太多类型的异常。</p>
+  <div class="textarea">
+    说明：如果程序中需要分类处理，则将异常根据分类组织成继承关系。如果确实有很多异常类型首先考虑用异常描述来区别，throws/exception子句标明的异常最好不要超过三个。
+  </div>
+  <h3>捕获具体异常子类</h3>
+  <p>异常捕获尽量不要直接 catch (Exception ex)，应该把异常细分处理。</p>
+  <h3>重复代码</h3>
+  <p>如果多段代码重复做同一件事情，那么在方法的划分上可能存在问题。</p>
+  <div class="textarea">
+    	说明：若此段代码各语句之间有实质性关联并且是完成同一件功能的，那么可考虑把此段代码构造成一个新的方法。
+  </div>
+  <h3>数据释放</h3>
+  <p>集合中的数据如果不使用了应该及时释放，尤其是可重复使用的集合。</p>
+  <div class="textarea">
+    说明：由于集合保存了对象的引用，虚拟机的垃圾收集器就不会回收。
+  </div>
+  <h3>相关代码临近放置</h3>
+  <p>源代码中关系较为紧密的代码应尽可能相邻。</p>
+  <div class="textarea">
+    说明：便于程序阅读和查找。比如：内部类应声明在靠近使用它的地方。
+  </div>
+  <h3>避免使用晦涩的技巧</h3>
+  <p>不要使用难懂的技巧性很高的语句，除非很有必要时。</p>
+  <div class="textarea">
+    说明：高技巧语句不等于高效率的程序，实际上程序的效率关键在于算法。
+  </div>
+</body>
+</html>

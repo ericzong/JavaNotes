@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>Java 专题：注解类型</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/fold.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+<link type="text/css" rel="stylesheet" href="../css/tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/highlight.css" />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+<div class="ext">
+  本文基于 Java 8。
+</div>
+
+<h1>概述</h1>
+
+<p>注解类型（annotation type）是一种标记，将信息与程序结构关联起来，但在运行时不会产生任何影响。注解表示的是注解类型的具体调用，并通常会为该类型的元素提供值。</p>
+<p>注解类型是一种特殊接口类型，是元数据（metadata）的一种形式。</p>
+<p class="next">注解类型可应用于声明或任何类型使用时（Java8 新增），使用的标准形式如下：</p>
+<pre class="code"><code>
+// “@”暗示编译器其后跟着的是注解类型的名称
+@AnnotationName(element1=value1, element2=value2)</code></pre>
+<p class="next">使用示例：</p>
+<pre class="code"><code>
+// 普通注解的使用
+@Author(name="Eric Zong"  date="2016/4/24")
+// 如果注解只有一个 value 元素，可省略名称
+@SuppressWarnings("unchecked")
+// 如果注解没有元素，则括号也可以省略
+@Override</code></pre>
+
+<h1>功能</h1>
+
+<p class="next">注解的功能主要包括：</p>
+<ul>
+  <li>为编译器提供信息——编译器可以用其来探测错误或抑制警告；</li>
+  <li>编译时和部署时处理——软件工具可以处理注解用以生成代码，XML 文件等；</li>
+  <li>运行时处理——运行时检查某些注解。</li>
+</ul>
+<p>简单说来，注解常用于：创建文档、跟踪代码的依赖性、执行编译时格式检查、代替已有的配置文件。</p>
+
+<h1>分类</h1>
+
+<p>注解类型可以按不同的依据划分为不同的类型，主要的分类方式有以下一些。</p>
+<p>按元素多少可分为：完整（普通）注解、单元素注解、标记注解。</p>
+<p>按注解保留的生命周期可分为：源代码注解、编译时注解、运行时注解。</p>
+<p>按来源可为分为：预定义注解、第三方注解、自定义注解。</p>
+
+<h2>预定义注解</h2>
+
+<p>Java 本身内置了一些注解类型供我们使用，称为“预定义注解”。</p>
+<p>预定义注解在 java.lang 或 java.lang.annotation 包中。</p>
+<p>其中有一部分是应用于注解类型的注解类型，称为“元注解”，这将在后续相应章节讲解。</p>
+<p>下面列举说明的是除元注解外主要的预定义注解，它们大都是为编译器提供信息的。</p>
+
+<h3>@Deprecated</h3>
+<p>@Deprecated 暗示被标注的元素已过时并不应再使用。</p>
+<p>当程序使用一个被该注解标记的类型、方法、域或构造器的声明时，编译器将产生一个警告。
+“使用”包括：名字覆盖、调用、引用。</p>
+<p>唯一可以引发过时警告的隐式声明的结构就是容器注解，但不鼓励这样的标注。</p>
+<p>过时的元素的 Javadoc 注释中也应该使用 @deprecated 标记。</p>
+<pre class="code"><code>
+// Javadoc comment follows
+/**
+ * @deprecated
+ * explanation of why it was deprecated
+ */
+@Deprecated
+static void deprecatedMethod() { }  
+</code></pre>
+
+<h3>@Override</h3>
+<p>@Override 表示被标注的方法覆盖了超类型的方法。</p>
+<p>如果被标注的方法并非覆盖，则编译器将产生一个错误。</p>
+
+<h3>@SuppressWarnings</h3>
+<p>@SuppressWarnings 告知编译器抑制指定的警告。</p>
+<p>我们必须指定一种或几种要抑制的警告，抑制多种警告语法像这样：@SuppressWarnings({"unchecked", "deprecation"})</p>
+
+<h3>@SafeVarargs</h3>
+<p>@SafeVarargs 明确其代码不存在潜在的安全风险，抑制相关警告。</p>
+<p class="next">具有不可具化元素类型的可变参数可能会引发堆污染，并产生编译时非受检警告。
+如果可变参数方法体相对于可变参数是行为得当的，那么应当抑制这种警告。</p>
+<div class="ext">public static&lt;T> Boolean addAll(Collection&lt;? super T> c, T... elements)</div>
+<p>只能应用于 static 方法、final 实例方法，以及构造器，所以不能在会发生方法覆盖的地方使用。</p>
+<p>Java 7 新增注解。</p>
+
+<h3>@FunctionalInterface</h3>
+<p>@FunctionalInterface 暗示类型声明是一个函数接口（functional interface）。</p>
+<p>Java 8 新增注解。</p>
+
+<h2>元注解</h2>
+
+<p>应用于其它注解类型声明上的注解类型称为元注解（meta-annotations），主要定义在 java.lang.annotation 包中。</p>
+
+<h3>@Retention</h3>
+<p>@Retention 指定注解如何保留。</p>
+<p>有 3 种策略：SOURCE、CLASS（缺省）、RUNTIME，它们由 RetentionPolicy 枚举提供。详见附录。</p>
+
+<h3>@Target</h3>
+<p>@Target 指定注解类型可应用的上下文，包括声明上下文和类型上下文。</p>
+<p>缺省 @Target，注解类型可应用于除类型参数声明之外的所有声明上下文中，但不能应用于任何类型上下文中。</p>
+<p class="next">必须指定一个或多个目标元素，使用 ElementType 枚举指定，且不能重复。</p>
+<pre class="code"><code>
+@Target // 不指定目标类型是非法的
+@Target({}) // 指定空的目标类型数组也是非法的
+@Target({ElementType.FIELD, ElementType.FIELD}) // 目标类型重复出现也是非法的
+</code></pre>
+
+<h3>@Inherited</h3>
+<p>@Inherited 表明注解类型可以从超类继承，默认不是继承的。</p>
+<p>仅能应用于类声明，否则无效。仅促成从超类继承，对实现的接口无效。</p>
+<p>派生类上查询不到的可继承注解，应在超类上查询。</p>
+
+<h3>@Documented</h3>
+<p>@Documented 表明使用 Javadoc 工具时，注解应该文档化。（默认注解不包括在 Javadoc 中）</p>
+
+<h3>@Repeatable</h3>
+<p>@Repeatable 在可重复注解类型声明上表示其容器注解类型。</p>
+<p>Java 8 新增。</p>
+
+<h1>定义</h1>
+
+<h2>语法</h2>
+
+<pre class="code"><code>
+AnnotationTypeBody:
+  { {AnnotationTypeMemberDeclaration} }
+AnnotationTypeMemberDeclaration:
+  AnnotationTypeElementDeclaration
+  ConstantDeclaration
+  ClassDeclaration
+  InterfaceDeclaration
+  ;
+
+AnnotationTypeElementDeclaration:
+  {AnnotationTypeElementModifier} UnannType Identifier () [Dims]
+[DefaultValue];
+
+AnnotationTypeElementModifier: one of
+  Annotation public
+  abstract 
+  
+DefaultValue:
+  Default ElementValue</code></pre>
+<div class="ext">
+  <p>按照 AnnotationTypeElementDeclaration 产生式，在注解类型声明中的方法声明不能够有任何形式参数、类型参数或 throws 子句。</p>
+  <p>按照 AnnotationTypeElementModifier 产生式，在注解类型声明中的方法声明不能是 default 或 static 的。</p>
+  <p>按照惯例，注解是唯一可以出现在注解类型元素上的 AnnotationTypeElementModifier。</p>
+</div>
+<p class="next">示例：</p>
+<pre class="code"><code>
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Inherited
+@Documented
+public @interface Description
+{
+  String desc();
+  int age() default 18;
+}
+</code></pre>
+
+<p>注解类型，是接口的一种特殊表现形式，所以与接口定义类似，只是在关键字 interface 前加“@”区分普通接口。</p>
+<p>注解类型的直接超接口是 java.lang.annotation.Annotation。</p>
+
+<h2>注解类型元素</h2>
+
+<p>注解类型声明 T 不能直接或间接地包含 T 类型的元素。</p>
+<p>注解类型的任何元素都是使用在该类型中显式声明的方法定义的，并且以无参无异常的方式声明。</p>
+<p>元素的返回值类型是受限的，只能是基本数据类型、String、Class 或 Class 的调用、Annotation、Enumeration 及它们的数组。</p>
+<p>元素方法签名不能跟 Object 类或 Annotation 接口中声明的任何 public 或 protected 方法签名是覆盖等价的。</p>
+<p>可以用 default 为元素指定默认值。</p>
+
+<h1>查询获取</h1>
+<p>通过反射获取类、方法或成员上的运行时注解信息，从而实现动态控制程序运行的逻辑。</p>
+<p>AnnotatedElement 接口提供了获取注解信息的相关方法，Class、Method、Field 等都实现了该接口，所以可以获取到其上的注解信息。</p>
+<pre class="code"><code class="java">
+boolean isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)
+&lt;T extends Annotation> T getAnnotation(Class&lt;T> annotationClass)
+Annotation[] getAnnotations();
+&lt;T extends Annotation> T[] getAnnotationsByType(Class&lt;T> annotationClass) 
+&lt;T extends Annotation> T getDeclaredAnnotation(Class&lt;T> annotationClass) 
+&lt;T extends Annotation> T[] getDeclaredAnnotationsByType(Class&lt;T> annotationClass)
+Annotation[] getDeclaredAnnotations();
+</code></pre>
+
+<h1>注意事项</h1>
+<p>局部变量声明上的注解永远不会在二进制表示中保留。*</p>
+<p>因为语法限制，注解类型声明不能是泛化的。</p>
+<p>java.lang.annotation.Annotation 是注解类型的超接口，但它本身不是注解类型。</p>
+<p>注解类型元素的缺省值并没有编译到注解中，而是在注解被读取时动态地应用的。因此，改变缺省值会影响注解。</p>
+<p class="next">注释类型可作为注解出现在自身类型声明上。注解关系传递闭包中可以存在环。</p>
+<pre class="code"><code>
+// 以下 2 个注解类型循环注解对方，甚至自注解都是合法的
+@MyAnnotation
+@MyAnnotation2
+@interface MyAnnotation 
+{
+    @MyAnnotation
+    @MyAnnotation2
+    int value() default 0;
+}
+
+@MyAnnotation
+@MyAnnotation2
+@interface MyAnnotation2
+{
+    @MyAnnotation
+    @MyAnnotation2
+    int value() default 2;
+}</code></pre>
+<p class="next">注解类型声明 T 不能直接或间接地包含 T 类型的元素。</p>
+<pre class="code"><code>
+// 元素类型是自身类型是不允许的
+@interface MyAnnotation 
+{
+    MyAnnotation value();
+}
+// 元素类型形成循环引用也是不允许的
+@interface MyAnnotation 
+{
+    MyAnnotation2 value();
+}
+
+@interface MyAnnotation2
+{
+    MyAnnotation value();
+}</code></pre>
+
+<h1>新特性</h1>
+
+<p>说明 Java 7 和 Java 8 所加入的与注解相关的新特性。</p>
+
+<h2>新增注解类型</h2>
+
+<p>Java 7 新增 @SafeVarargs 注解类型；Java 8 新增 @FunctionalInterface 注解类型。相关说明见上文。</p>
+
+<h2>类型注解</h2>
+
+<p>Java8 之前，注解类型只能应用于声明，之后可应用于任何类型使用时，即在任何使用一个类型的地方，
+比如：类实例化表达式（new）、类型转换、implements子句、throws子句。这称为类型注解（type annotation）。</p>
+<p>应用于类型使用的注解类型，称为类型注解（type annotation）。</p>
+<p>类型注解增强了类型检查，不过 Java 8 没有提供检查框架，但是可以自定义或下载一个。</p>
+<div class="fold">
+  <div class="title">示例：</div>
+  <input type="checkbox" />
+  <span class="ico">&nbsp;</span>
+  <div class="content">
+    <p>	类实例创建表达式： new @Interned MyObject();</p>
+    <p>类型转换： myString = (@NonNull String)str;</p>
+    <p>实现子句： class UnmodifiableList&lt;T> implements @Readonly List&lt;@Readonly T> { ... }</p>
+    <p>异常抛出声明： void monitorTemperature() throws @Critical TemperatureException { ... }</p>
+  </div>
+</div>
+
+<h2>可重复注解</h2>
+
+<p>Java 8 之前，同一个注解类型只能应用一次，之后如果可以同时应用多次，则称为“可重复注解（repeating annotation）”。</p>
+<p class="next">定义可重复注解类型跟普通注解类型定义相似，不同仅在于需要使用 @Repeatable 元注解标记。</p>
+<pre class="code"><code class="java">
+@Repeatable(MyContainingType.class)
+public @interface MyRepeatableAnnotation
+{
+  //……
+}
+</code></pre>
+<p>我们可以注意到 @Repeatable 元注解需要指定一个 Class 类型的元素，该类型称为可重复注解类型的“容器注解类型（containing annotation type）”。</p>
+<p class="next">定义容器注解类型也有点特别，它必须定义一个 value 元素，其类型为上面定义的可重复注解类型的数组。</p>
+<pre class="code"><code class="java">
+public @interface MyContainingType
+{
+  MyRepeatableAnnotation[] value();
+}
+</code></pre>
+<p class="next">定义可重复注解还有以下一些需要注意的事项：</p>
+<ol>
+  <li>容器注解类型声明的任何除 value() 外的方法都应有缺省值。</li>
+  <li>容器注解类型存留时间至少与其对应的可重复注解类型一样长。存留期由@Retention注解表示。</li>
+  <li>可重复注解类型可应用的程序元素种类至少与其对应的容器注解类型相同。</li>
+  <li>可重复注解类型有 @Documented/@Inherited（元）注解，则容器注解类型也有。</li>
+  <li>容器注解类型自身可以是可重复的注解类型。</li>
+</ol>
+
+<h1>附录</h1>
+
+<h2>定义一览</h2>
+
+<dl>
+  <dt>预定义注解</dt>
+  <dd>Java 内置的注解。</dd>
+  <dt>元注解</dt>
+  <dd>应用于其它注解的注解。</dd>
+  <dt>标记注解</dt>
+  <dd>没有任何元素的注解类型。</dd>
+  <dt>单元素注解类型</dt>
+  <dd>只有一个元素的注解类型。</dd>
+  <dt>类型注解</dt>
+  <dd>应用于类型使用的注解。</dd>
+  <dt>可重复注解</dt>
+  <dd>可以重复应用多次的注解。</dd>
+</dl>
+
+<h2>相关规范</h2>
+<p>注解应用于声明上时，通常每个注解单独一行。</p>
+<p>@ 和 interface 是 2 个不同的标记。技术上可以用空白字符分隔开，但不推荐。</p>
+<p>单元素注解类型唯一的元素应取名为 value，以便在使用时可以忽略元素名和赋值号（=）。</p>
+<p>注解中的元素-值对出现的顺序应该与注解类型声明中对应元素出现顺序相同。</p>
+
+<h2>预定义注解参考</h2>
+
+<table>
+  <tr>
+    <th>名称</th>
+    <th>描述</th>
+    <th>保留</th>
+    <th>目标</th>
+  </tr>
+  <tr>
+    <td>@Deprecated</td>
+    <td>过时、已弃用</td>
+    <td>RUNTIME</td>
+    <td>CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE</td>
+  </tr>
+  <tr>
+    <td>@Override</td>
+    <td>覆盖超类型方法</td>
+    <td>SOURCE</td>
+    <td>METHOD</td>
+  </tr>
+  <tr>
+    <td>@SuppressWarnings</td>
+    <td>抑制警告</td>
+    <td>SOURCE</td>
+    <td>TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE</td>
+  </tr>
+  <tr>
+    <td>@SafeVarargs</td>
+    <td>消除泛型可变参数警告</td>
+    <td>RUNTIME</td>
+    <td>CONSTRUCTOR, METHOD</td>
+  </tr>
+  <tr>
+    <td>@FunctionalInterface</td>
+    <td>函数接口</td>
+    <td>RUNTIME</td>
+    <td>TYPE</td>
+  </tr>
+</table>
+
+<h2>@SuppressWarnings 抑制警告的关键字参考</h2>
+<table>
+  <tr>
+    <th>关键字</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>all</td>
+    <td>to suppress all warnings （抑制所有警告）</td>
+  </tr>
+  <tr>
+    <td>boxing </td>
+    <td>to suppress warnings relative to boxing/unboxing operations（抑制装箱、拆箱操作时候的警告）</td>
+  </tr>
+  <tr>
+    <td>cast </td>
+    <td>to suppress warnings relative to cast operations （抑制类型转换操作相关的警告）</td>
+  </tr>
+  <tr>
+    <td>dep-ann</td>
+    <td>to suppress warnings relative to deprecated annotation（抑制启用注释的警告）</td>
+  </tr>
+  <tr>
+    <td>deprecation </td>
+    <td>to suppress warnings relative to deprecation（抑制过时方法警告）</td>
+  </tr>
+  <tr>
+    <td>fallthrough </td>
+    <td>to suppress warnings relative to missing breaks in switch statements（抑制 switch 语句中缺失 breaks 的警告）</td>
+  </tr>
+  <tr>
+    <td>finally </td>
+    <td>to suppress warnings relative to finally block that don’t return （抑制 finally 模块没有返回的警告）</td>
+  </tr>
+  <tr>
+    <td>hiding </td>
+    <td>to suppress warnings relative to locals that hide variable</td>
+  </tr>
+  <tr>
+    <td>incomplete-switch</td>
+    <td>to suppress warnings relative to missing entries in a switch statement (enum case)（忽略不完整的 switch 语句）</td>
+  </tr>
+  <tr>
+    <td>nls </td>
+    <td>to suppress warnings relative to non-nls string literals（忽略非 nls 格式的字符）</td>
+  </tr>
+  <tr>
+    <td>null </td>
+    <td>to suppress warnings relative to null analysis（忽略对 null 的操作）</td>
+  </tr>
+  <tr>
+    <td>rawtypes </td>
+    <td>to suppress warnings relative to un-specific types when using generics on class params（使用 generics 时忽略没有指定相应的类型）</td>
+  </tr>
+  <tr>
+    <td>restriction </td>
+    <td>to suppress warnings relative to usage of discouraged or forbidden references</td>
+  </tr>
+  <tr>
+    <td>serial </td>
+    <td>to suppress warnings relative to missing serialVersionUID field for a serializable class（忽略在 serializable 类中没有声明 serialVersionUID 变量）</td>
+  </tr>
+  <tr>
+    <td>static-access</td>
+    <td>to suppress warnings relative to incorrect static access（抑制不正确的静态访问方式警告）</td>
+  </tr>
+  <tr>
+    <td>synthetic-access</td>
+    <td>to suppress warnings relative to unoptimized access from inner classes（抑制子类没有按最优方法访问内部类的警告）</td>
+  </tr>
+  <tr>
+    <td>unchecked </td>
+    <td>to suppress warnings relative to unchecked operations（抑制没有进行类型检查操作的警告）</td>
+  </tr>
+  <tr>
+    <td>unqualified-field-access</td>
+    <td>to suppress warnings relative to field access unqualified （抑制没有权限访问的域的警告）</td>
+  </tr>
+  <tr>
+    <td>unused </td>
+    <td>to suppress warnings relative to unused code  （抑制没被使用过的代码的警告）</td>
+  </tr>
+</table>
+
+<h2>元注解参考</h2>
+
+<table>
+  <tr>
+    <th>名称</th>
+    <th>描述</th>
+  </tr>
+  <tr>
+    <td>@Retention</td>
+    <td>保留级别</td>
+  </tr>
+  <tr>
+    <td>@Target</td>
+    <td>可应用上下文</td>
+  </tr>
+  <tr>
+    <td>@Inherited</td>
+    <td>可继承性</td>
+  </tr>
+  <tr>
+    <td>@Documented</td>
+    <td>文档化</td>
+  </tr>
+  <tr>
+    <td>@Repeatable</td>
+    <td>可重复注解</td>
+  </tr>
+</table>
+<div class="ext">
+  注：元注解都将保留到运行时，当然，仅能应用于注解类型。
+</div>
+
+<h2>注解的保留策略参考</h2>
+
+<table>
+  <tr>
+    <th>枚举值</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>RetentionPolicy.SOURCE</td>
+    <td>源代码级保留，编译器将忽略</td>
+  </tr>
+  <tr>
+    <td>RetentionPolicy.CLASS</td>
+    <td>（默认）在编译时被编译器保留，但是 JVM 将忽略</td>
+  </tr>
+  <tr>
+    <td>RetentionPolicy.RUNTIME</td>
+    <td>被 JVM 保留，运行时可用</td>
+  </tr>
+</table>
+
+<h2>注解应用目标参考</h2>
+
+<table>
+  <tr>
+    <th>枚举值</th>
+    <th>说明</th>
+  </tr>
+  <tr>
+    <td>ElementType.ANNOTATION_TYPE</td>
+    <td>注解类型</td>
+  </tr>
+  <tr>
+    <td>ElementType.CONSTRUCTOR</td>
+    <td>构造器</td>
+  </tr>
+  <tr>
+    <td>ElementType.FIELD</td>
+    <td>域</td>
+  </tr>
+  <tr>
+    <td>ElementType.LOCAL_VARIABLE</td>
+    <td>局部变量</td>
+  </tr>
+  <tr>
+    <td>ElementType.METHOD</td>
+    <td>方法</td>
+  </tr>
+  <tr>
+    <td>ElementType.PACKAGE</td>
+    <td>包</td>
+  </tr>
+  <tr>
+    <td>ElementType.PARAMETER</td>
+    <td>方法参数</td>
+  </tr>
+  <tr>
+    <td>ElementType.TYPE</td>
+    <td>任何类元素，包括类、接口、枚举</td>
+  </tr>
+  <tr>
+    <td>ElementType.TYPE_PARAMETER</td>
+    <td>泛化类、接口、方法和构造器的类型参数声明</td>
+  </tr>
+  <tr>
+    <td>ElementType.TYPE_USE</td>
+    <td>16 种类型上下文</td>
+  </tr>
+</table>
+
+<h2>参考文档</h2>
+<p>Oracle官方文档《The Java™ Tutorials》</p>
+
+</body>
+</html>

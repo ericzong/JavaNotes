@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>Java 专题：枚举类型</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+<link type="text/css" rel="stylesheet" href="../css/highlight.css" />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  <h1>简介</h1>
+    <p>枚举类型是一种特殊的类，它支持以类型安全的方式定义一个小的取值集。</p>
+    <p>Java的枚举类型比其它语言中的对应物要强大，枚举是对象，并且枚举类体可以包含方法和其它域。
+    编译器会为枚举自动添加一系列方法，比如一个静态的values方法返回一个包含所有枚举值的数组，
+    枚举值按声明顺序排列。</p>
+  <h1>语法</h1>
+  <pre class='code'><code>
+EnumDeclaration: 
+{ClassModifier} enum Identifier [Superinterfaces] EnumBody 
+
+EnumBody: 
+{ [EnumConstantList] [,] [EnumBodyDeclarations] } 
+
+EnumConstantList: 
+EnumConstant {, EnumConstant } 
+
+EnumConstant: 
+{ EnumConstantModifier} Identifier [( [ArgumentList] )] [ClassBody] 
+
+EnumConstantModifier: 
+Annotation 
+
+ArgumentList: 
+Expression {, Expression} 
+
+EnumBodyDeclarations: 
+; {ClassBodyDeclaration} </code></pre>
+
+  <h1>限制</h1>
+  
+  <p>所有枚举类型都隐式继承自 java.lang.Enum，由于 Java 的单继承限制，所以枚举不能继承其它任何类。</p>
+  <p>枚举值需要在其它域和方法前定义，所有的枚举值之间以英文逗号隔开，枚举值列举结束后以英文分号作为结束。</p>
+  <p class="next">构造器、实例初始化器、实例变量初始化器表达式中不能引用 static 域，除非常量。</p>
+  <div class="ext">
+    <p>否则可能导致循环初始化而失败。</p>
+  </div>
+  <p class="next">枚举类型实例永远不能终结，不可声明终结器。</p>
+  <div class="ext">
+    <p>Enum 类的 finalize() 方法是一个 final 的空方法。</p>
+  </div>
+  <p>构造器中不能调用超类构造器。</p>
+
+  <h1>隐式与缺省</h1>
+  
+  <p>枚举类型隐式等价于 abstract 或 final 修饰，默认是 final，除非有至少 1 个枚举常量具有类体。</p>
+  <p>嵌套枚举类是隐式 static 的。</p>
+  <p>构造器声明隐式 private。</p>
+  
+  <div class="ext">
+    <ul>
+      <li>隐式：缺省表达形式的一种，指无论是否显式指定某值，都与显式指定效果一样。比如，“嵌套枚举类是隐式 static 的”即表示嵌套枚举类无论是否有 static 修饰，都等同有 static 修饰。</li>
+      <li>隐式等价：缺省表达形式的一种，指从效果上看等价于显式指定某值，但不允许显式指定。</li>
+    </ul>
+  </div>
+    
+  <h1>限制实例数</h1>
+  <p>枚举类型实例数不会超出枚举常量定义的实例范围之外，这是如何限制的呢？首先，枚举类型的构造器是私有的，常规创建实例的方法不可行；
+	其次，Enum 的 clone() 方法直接抛异常，并且是 final 的，所以不能克隆实例；另外，反序列化方法也是类似的情况；最后，反射实例化也是禁止的。</p>
+	
+  <h1>特别的枚举</h1>
+  <h2>实现接口</h2>
+  <p>枚举类默认继承自java.lang.Enum，而不能是其它类型。但是，可以实现一个或多个接口。</p>
+  <p>不过，实现方式有两种，一是枚举类实现接口方法，一是枚举值实现接口方法。</p>
+  <p>如果由枚举类来实现接口里的方法，则每个枚举值在调用该方法时都有相同的行为方式。
+  如果需要每个枚举值在调用该方法时呈现出不同的行为方式，则可以让每个枚举值分别来实现该方法，
+  每个枚举值提供不同的实现方式，从而让不同的枚举值调用该方法时具有不同的行为方式。</p>
+  <p class="next">例如有以下接口：</p>
+  <pre class='code'><code>
+interface Interface 
+{
+  public void call();
+} </code></pre>
+  <p class="next">在枚举类中实现该接口代码应该如下：</p>
+  <pre class='code'><code>
+enum EnumClass1 implements Interface
+{
+  EnumValue1, EnumValue2;
+  @Override
+  public void call()
+  {
+    // ...
+  }
+} </code></pre>
+  <p class="next">在枚举值中实现该接口代码应该如下：</p>
+  <pre class='code'><code>
+enum EnumClass2 implements Interface
+{
+  EnumValue1
+  {
+    @Override
+    public void call()
+    {
+      // ...
+    }
+  },
+  EnumValue2
+  {
+    @Override
+    public void call()
+    {
+      // ...
+    }
+  }
+} </code></pre>
+
+  <h2>包含抽象方法</h2>
+  <p>虽然枚举类不能被继承，但是，却可以包含抽象方法。
+  当枚举类包含抽象方法时，需要在枚举值（constant-specific class body,特定于常量的类主体）中实现抽象方法，
+  这和在枚举值中实现接口方法是类似的。</p>
+  <p>这种方法被称作 “特定于常量的方法实现（constant-specific method implementation）。”</p>
+  <p class="next">示例代码如下：</p>
+  <pre class='code'><code>
+enum EnumClass0 
+{
+  EnumValue1 
+  {
+    @Override
+    public void abstractMethod()
+    {
+      // ...
+    }
+  },
+  EnumValue2 {
+    @Override
+    public void abstractMethod()
+    {
+      // ...
+    }
+  };
+  public abstract void abstractMethod(); 
+} </code></pre>
+  
+</body>
+</html>

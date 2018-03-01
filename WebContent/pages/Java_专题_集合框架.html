@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>Java专题：集合框架</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/fold.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+<link type="text/css" rel="stylesheet" href="../css/tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/highlight.css" />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+
+  <h1>概述</h1>
+  <p>集合框架有 2 个顶层接口 Collection 和 Map。</p>
+  <p>迭代器，轻量级对象，创建代价小。</p>
+  <p>规范约定 Collection 实现类应提供两个“标准”构造方法：一个无参构造方法；一个带 Collection 类型单参数的构造方法。
+  不过，接口无法强制执行此约定，但 Java 库中的实现都遵从。</p>
+  <p>类似地，Map 实现类也应提供两个“标准”构造方法：一个无参构造方法；一个带单个 Map 类型的构造方法。</p>
+  
+  <h1>集合层级结构</h1>
+  <img src="../images/Java_专题_集合框架_集合层级结构.png" alt="集合层级结构" />
+  
+  <h1>说明</h1>
+  
+  <h2>Set</h2>
+  
+  <p>可变对象作为 Set 元素时，应特别注意，在使用 Set 期间如果以一种影响 equals 比较的方式改变对象的值，那么其行为将不确定。
+  特别地，禁止将 Set 作为自身的元素。</p>
+  
+  <h2>List</h2>
+  
+  <p>列表允许自身作为元素，但应特别小心，因为此时，equals 和 hashCode 方法不再是定义良好的。</p>
+  
+  <h2>Queue</h2>
+  
+  <p>不应将 null 值插入 Queue 中，即使某些实现允许插入 null 值，因为作为 poll 和 peek 方法的一个特殊返回值，它表明队列不包含元素。</p>
+  
+  <h2>Map</h2>
+  
+  <p>Map，又称“字典”（Map 取代了 Dictionary 抽象类），或“关联数组”。Java 中，通过包装 Map 来实现 Set。</p>
+  <p>Map 的键集与值集分别类似于 Set 和 List，即将可变对象作为键以及自身作为值时，应特别注意。</p>
+  <p>轻负载：冲突少，适宜插入与查询，迭代器迭代较慢。</p>
+  
+  <h1>惯用技巧</h1>
+  
+  <p class="next">移除集合中所有 null 元素：</p>
+  <pre class="code"><code class="java">
+c.removeAll(Collections.singleton(null));</code></pre>
+
+  <p class="next">排除集合中的重复项：</p>
+  <pre class="code"><code class="java">
+Collection&lt;Type&gt; noDups = new HashSet&lt;Type&gt;(c);
+c.stream().collect(Collectors.toSet()); // Java 8
+Collection&lt;Type&gt; noDups = new LinkedHashSet&lt;Type&gt;(c); // 保持顺序</code></pre>
+  
+  <h1>参考</h1>
+  
+  <h2>总结</h2>
+  
+  <p class="next">遍历集合的 3 种方法：1. 聚集操作（aggregate operations）；2. for-each；3. 迭代器（Iterators）</p>
+  
+  <table>
+    <caption>删除集合元素的方法</caption>
+    <thead>
+      <tr>
+        <th>所在接口</th>
+        <th>方法</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Collection</td>
+        <td>remove、removeAll、retainAll、clear</td>
+      </tr>
+      <tr>
+        <td>Iterator</td>
+        <td>remove</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table summary="General-purpose-implementations">
+    <caption id="General-purpose-implementations"><strong>通用实现汇总</strong></caption>
+    <thead>
+	  <tr>
+        <th>Interfaces</th>
+        <th>Hash table Implementations</th>
+        <th>Resizable array Implementations</th>
+        <th>Tree Implementations</th>
+        <th>Linked list Implementations</th>
+        <th>Hash table + Linked list Implementations</th>
+      </tr>
+	</thead>
+	<tbody>
+      <tr>
+        <td><code>Set</code></td>
+        <td><code>HashSet</code></td>
+        <td></td>
+        <td><code>TreeSet</code></td>
+        <td></td>
+        <td><code>LinkedHashSet</code></td>
+      </tr>
+      <tr>
+        <td><code>List</code></td>
+        <td></td>
+        <td><code>ArrayList</code></td>
+        <td></td>
+        <td><code>LinkedList</code></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>Queue</code></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>Deque</code></td>
+        <td></td>
+        <td><code>ArrayDeque</code></td>
+        <td></td>
+        <td><code>LinkedList</code></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>Map</code></td>
+        <td><code>HashMap</code></td>
+        <td></td>
+        <td><code>TreeMap</code></td>
+        <td></td>
+        <td><code>LinkedHashMap</code></td>
+      </tr>
+    </tbody>
+  </table>
+  
+    <table>
+    <caption>Set 常用实现类对比</caption>
+    <thead>
+      <tr>
+        <th>实现类</th>
+        <th>描述</th>
+        <th>最佳实践</th>
+        <th>判等</th>
+        <th>添加空值</th>
+        <th>空值判断/移除</th>
+        <th>线程安全</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>HashSet</td>
+        <td></td>
+        <td>equals 与 hashCode 行为应一致</td>
+        <td>equals &amp; hashCode</td>
+        <td>√</td>
+        <td>√</td>
+        <td>×</td>
+      </tr>
+      <tr>
+        <td>TreeSet</td>
+        <td>红黑树</td>
+        <td>equals 与 compareTo 行为应一致</td>
+        <td>compareTo</td>
+        <td>NullPointerException</td>
+        <td>NullPointerException</td>
+        <td>×</td>
+      </tr>
+      <tr>
+        <td>EnumSet</td>
+        <td>
+          内部以位向量的形式存储，紧凑、高效；<br />
+          占用内存小，运行效率很好；<br />
+          批量操作效率高（containsAll、retainAll）
+        </td>
+        <td></td>
+        <td></td>
+        <td>NullPointerException</td>
+        <td>√</td>
+        <td>×</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table>
+    <caption>Queue 常用方法</caption>
+    <thead>
+      <tr>
+        <th>操作</th>
+        <th>抛出异常方法</th>
+        <th>异常类型</th>
+        <th>返回特殊值方法</th>
+        <th>特殊值</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>插入</th>
+        <td>add</td>
+        <td>IllegalStateException</td>
+        <td>offer</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <th>移除</th>
+        <td>remove</td>
+        <td>NoSuchElementException</td>
+        <td>poll</td>
+        <td>null</td>
+      </tr>
+      <tr>
+        <th>检查</th>
+        <td>element</td>
+        <td>NoSuchElementException</td>
+        <td>peek</td>
+        <td>null</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table>
+    <caption>Deque 常用方法</caption>
+    <thead>
+      <tr>
+        <th>操作</th>
+        <th>抛出异常方法</th>
+        <th>异常类型</th>
+        <th>特殊值方法</th>
+        <th>特殊值</th>
+        <th>抛出异常方法</th>
+        <th>异常类型</th>
+        <th>特殊值方法</th>
+        <th>特殊值</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>插入</th>
+        <td>addFirst</td>
+        <td>IllegalStateException</td>
+        <td>offerFirst</td>
+        <td>false</td>
+        <td>addLast</td>
+        <td>IllegalStateException</td>
+        <td>offerLast</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <th>移除</th>
+        <td>removeFirst</td>
+        <td>NoSuchElementException</td>
+        <td>pollFirst</td>
+        <td>null</td>
+        <td>removeLast</td>
+        <td>NoSuchElementException</td>
+        <td>pollLast</td>
+        <td>null</td>
+      </tr>
+      <tr>
+        <th>检查</th>
+        <td>getFirst</td>
+        <td>NoSuchElementException</td>
+        <td>peekFirst</td>
+        <td>null</td>
+        <td>getLast</td>
+        <td>NoSuchElementException</td>
+        <td>peekLast</td>
+        <td>null</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table>
+    <caption>Queue vs. Deque</caption>
+    <thead>
+      <tr>
+        <th>Queue</th>
+        <th>Deque</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>add</td>
+        <td>addLast</td>
+      </tr>
+      <tr>
+        <td>offer</td>
+        <td>offerLast</td>
+      </tr>
+      <tr>
+        <td>remove</td>
+        <td>removeFirst</td>
+      </tr>
+      <tr>
+        <td>poll</td>
+        <td>pollFirst</td>
+      </tr>
+      <tr>
+        <td>element</td>
+        <td>getFirst</td>
+      </tr>
+      <tr>
+        <td>peek</td>
+        <td>peekFirst</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table>
+    <caption>Stack vs. Deque</caption>
+    <thead>
+      <tr>
+        <th>Stack</th>
+        <th>Deque</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>push</td>
+        <td>addFirst</td>
+      </tr>
+      <tr>
+        <td>pop</td>
+        <td>removeFirst</td>
+      </tr>
+      <tr>
+        <td>peek</td>
+        <td>peekFirst</td>
+      </tr>
+    </tbody>
+  </table>
+  
+    <table>
+    <caption>Map 常用实现类对比</caption>
+    <thead>
+      <tr>
+        <th>实现类</th>
+        <th>描述</th>
+        <th>判等</th>
+        <th>添加空值</th>
+        <th>空值判断</th>
+        <th>线程安全</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hashtable</td>
+        <td>陈旧类型，不推荐使用。</td>
+        <td>key: equals &amp; hashCode; value: equals</td>
+        <td>key &amp; value: NullPointerException</td>
+        <td>key &amp; value: NullPointerException</td>
+        <td>√</td>
+      </tr>
+      <tr>
+        <td>HashMap</td>
+        <td></td>
+        <td>key: equals &amp; hashCode; value: equals</td>
+        <td>√</td>
+        <td>√</td>
+        <td>×</td>
+      </tr>
+      <tr>
+        <td>TreeMap</td>
+        <td></td>
+        <td>compareTo</td>
+        <td>key: NullPointerException; value: √</td>
+        <td>key: NullPointerException; value: √</td>
+        <td>×</td>
+      </tr>
+      <tr>
+        <td>EnumMap</td>
+        <td></td>
+        <td></td>
+        <td>key: NullPointerException; value: √</td>
+        <td>key &amp; value: √</td>
+        <td>×</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p class="next">HashMap 性能优化的 3 个目标：</p>
+  <ol>
+    <li>访问时间。散列冲突保持很小，initialCapacity &gt; 条目数。</li>
+    <li>有效迭代。initialCapacity 保持最小，多余容量不利于迭代。</li>
+    <li>可预期的行为。再散列应在条目数量不可预期增长时才发生。</li>
+  </ol>
+  
+  <table>
+    <caption>视图方法类型</caption>
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>相关方法</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>同步视图</td>
+        <td>Collections.synchronizedXXX</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>不可修改视图</td>
+        <td>Collections.unmodifiableXXX</td>
+        <td>只读</td>
+      </tr>
+      <tr>
+        <td>范围视图</td>
+        <td>List.subList、SortedSet.headSet/tailSet/subSet、SortedMap.headMap/tailMap/subMap</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>集合视图</td>
+        <td>entrySet、keySet、values</td>
+        <td>Map 专有</td>
+      </tr>
+      <tr>
+        <td>数组的列表视图</td>
+        <td>Arrays.asList</td>
+        <td>定长</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p class="next">正确 equals 的 5 个特性：</p>
+  <ul>
+    <li>自反性</li>
+    <li>对称性</li>
+    <li>传递性</li>
+    <li>一致性</li>
+    <li>非空性。即对非空 o，o.equals(null) 为 false。</li>
+  </ul>
+  
+  <h2>性能分析</h2>
+  
+  <h3>List 常用实现类性能分析</h3>
+  
+  <p>添加/删除性能：ArrayList &lt; LinkedList</p>
+  <p>随机访问性能：ArrayList &gt; LinkedList</p>
+  <p>迭代性能：ArrayList &lt; LinkedList</p>
+  
+  <details>
+  	<summary>扩展说明</summary>
+  	<p>ArrayList：随机访问快，原因是基于数组下标访问；写数据慢，原因是数组复制或扩容慢。</p>
+  	<p>LinkedList：随机访问慢，原因是需要链表遍历（由于从较近的一端开始遍历，所以至多会遍历一半元素）；
+  	写数据快，原因是仅需修改指针。</p>
+  	<p>Vector：线程同步（synchronized 方法），性能比 ArrayList 差。</p>
+  </details>
+  
+  <h3>Set 常用实现类性能分析</h3>
+  
+  <p>迭代性能：HashSet &lt; TreeSet；HashSet &lt; LinkedHashSet </p>
+  <p>非迭代性能：HashSet &gt; TreeSet；HashSet &gt; LinkedHashSet </p>
+  <p>EnumSet 性能最好</p>
+  
+  <h3>常用实现类性能分析</h3>
+  
+  <p>HashMap &gt; Hashtable &gt; TreeMap</p>
+  <p>HashMap &gt; LinkedHashMap</p>
+  <p>EnumMap 性能最好</p>
+  
+  <h2>对比</h2>
+  
+  <h3>不可修改视图 vs. 不变容器</h3>
+  <p>可修改（modifiable）/不可修改（unmodifiable），只用于视图。</p>
+  <p>可变（mutable）/不可变（immutable），用于支持容器。</p>
+  <p>不同于不可修改视图，不可变容器是一个定制容器或者通用容器，除了不可修改视图外，没有对那个容器的引用。</p>
+  
+  <h1>附录</h1>
+  
+  <h2>中英对照</h2>
+  
+  <table>
+    <caption>中英对照</caption>
+    <thead>
+      <tr>
+        <th>英文</th>
+        <th>英文全称</th>
+        <th>中文</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>deque</td>
+        <td>double ended queue</td>
+        <td>双端队列</td>
+        <td>音“deck”</td>
+      </tr>
+      <tr>
+        <td>bucket</td>
+        <td></td>
+        <td>桶</td>
+        <td></td>
+      </tr>
+      <tr>
+         <td>threshold</td>
+         <td></td>
+         <td>极限</td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>load factor</td>
+         <td></td>
+         <td>负载因子</td>
+         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h2>定义</h2>
+  
+  <dl>
+    <dt>附属接口</dt>
+    <dd>因为要表示其他若干个接口的共性而出现的接口。</dd>
+  
+    <dt>支持容器（backing container）</dt>
+    <dd>实际存储元素、条目、键或值的容器。</dd>
+    
+    <dt>结构性的修改</dt>
+    <dd>增加或删除一个或多个元素以及明显地重新定义支持数组的大小，仅仅是设置一个元素的值不是结构性的修改（并发修改）。</dd>
+    
+    <dt>散列表容量</dt>
+    <dd>散列表中的桶位数。</dd>
+    
+    <dt>散列表初始容量</dt>
+    <dd>散列表在创建时所拥有的桶位数。</dd>
+    
+    <dt>散列表尺寸</dt>
+    <dd>散列表中当前存储的项数。</dd>
+    
+    <dt>散列表负载因子</dt>
+    <dd>尺寸/容量。</dd>
+    
+    <dt>桶位（bucket）</dt>
+    <dd>散列表中的“槽位”（slot）。</dd>
+  </dl>
+  
+  <h2>特殊说明</h2>
+  
+  <p>Collection 可能被认为是一个“附属接口”。</p>
+  
+  <p>C++ 容器之间的所有共性都通过迭代器达成。Java 遵循了 C++ 的方式，即用迭代器而不是 Collection 来表示容器之间的共性。
+  但将这两种方法绑定到了一起， 因为实现 Collection 就意味着需要提供 iterator 方法（父接口 Iterable 中定义）。</p>
+  
+  <p class="next">Collection 中存在可选方法（如添加和移除方法），可选方法违反了接口的基本原则——接口是面向对象设计中的契约，它声明无论如何实现该接口，
+  都保证可向其发送这些消息（方法调用）——可选方法声明调用某些方法将不会执行有意义的行为。相反，会抛出异常。</p>
+  
+  <p>TreeSet 添加第一个元素时，该元素不必实现 Comparable 接口，但不推荐这样做。</p>
+  
+  <p>ListIterator 向前迭代不返回新加的元素，向后迭代总返回新加的元素。</p>
+  
+  <p>Arrays.asList 返回 Arrays$ArrayList 实例，不可增删元素。</p>
+  
+  <p>内部基于数组的集合实现，随机访问性能优于迭代访问。因为，随机访问将转换为数组元素访问。</p>
+  
+  <p>无论克隆（clone）还是拷贝（构造器）容器时，浅拷贝是个标准。</p>
+  
+  <p>所有视图都是封装器。</p>
+  <p>互斥的是同步视图，不是支持容器。</p>
+  <p>视图的任何变化都反映在支持容器中，反之亦然。</p>
+  <p>同步视图的迭代器是不同步的，也不能被同步。</p>
+  <p>高度的并发性（Highly Concurrent），内建的集合不是为了支持高度并发性而设计的。同步封装器（和传统容器）在访问集合时锁住了整个集合。</p>
+  
+  <h2>溯源</h2>
+
+  <p class="next">为什么集合接口中要定义可选方法？</p>
+  <div class="textarea">
+    <p> 防止在设计中出现接口爆炸的情况。</p>
+  </div>
+
+  <p class="next">为什么 HashMap 构造的初始容量总是指定集合或 Map 大小的 2 倍 + 1？</p>
+  <div class="textarea">
+    <p>为使散列分布均匀，桶的数量通常使用质数。若做不到，就设为奇数。</p>
+    <p>事实证明，质数实际上并不是散列桶的理想容量。近来，（经过广泛的测试）Java 的散列函数都使用 2 的整数次方，对现代的处理器来说，除法与求余数是最慢的操作，
+    使用 2 的整数次方长度的散列表，可用掩码代替除法。因为 get() 是使用最多的操作，求余数的 % 操作是其开销最大的部分，而使用 2 的整数次方可以消除此开销（也可能对 hashCode() 有些影响）。</p>
+  </div>
+  
+  <p class="next">为什么 HashSet 冠以 hash 之名？</p>
+  <div class="textarea">
+    <p>简单地说，HashSet 是因为元素存储在 HashMap 里才被这么命名的。</p>
+    <p>理论上来说，使用 Hash 算法的数据结构应该只有散列表（Hashtable/HashMap）。但是，当仅关注其键集时，HashMap 会退化为 Set 的一种实现。
+    因此，不必特别实现 Set，而只需要封装一个 HashMap 即可。封装 HashMap 实现的 Set 理应称为 HashSet。</p>
+  </div>
+  
+  <h2>过时的类型</h2>
+  
+  <p>由于一开始 Java 并没有设计集合框架，这导致标准库中存在一些陈旧的类型，通常情况下我们不会再使用，除非是遗留代码。</p>
+  <p>这些类型主要包括：Vector、Stack、Hashtable、Enumeration……</p>
+  <ul>
+    <li>Vector 使用 ArrayList 替代</li>
+    <li>Stack 通常使用 LinkedList 替代</li>
+    <li>Hashtable 使用 HashMap 替代</li>
+    <li>Enumeration 被 Iterator 替代</li>
+  </ul>
+  <div class="ext">
+    <p>注意，陈旧的类型大都是同步的，所以，如果同步很重要，那么应使用相应同步版本替代。</p>
+  </div>
+  
+  <h2>杂项</h2>
+  
+  <p>队列（queue），源于英国，美国把队列说成 line。排队 - queue up（英）；get in line（美）。</p>
+  
+</body>
+</html>
