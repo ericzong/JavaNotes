@@ -43,18 +43,74 @@
   <img src="../../images/Design_Pattern_subject_strategy.png" alt="策略模式类图"  />
   
   <h1>参与者</h1>
+  <ul>
+  	<li>
+  		<p>Strategy（策略）</p>
+  		<div>
+  			<p>定义所有支持的算法的公共接口。</p>
+  		</div>
+  	</li>
+  	<li>
+  		<p>ConcreteStrategy（具体策略）</p>
+  		<div>
+  			<p>以 Strategy 接口实现某具体算法。</p>
+  		</div>
+  	</li>
+  	<li>
+  		<p>Context（上下文）</p>
+			<ul>
+				<li>用一个 ConcreteStrategy 对象来配置。</li>
+				<li>维护一个对 Strategy 对象的引用。</li>
+				<li>可定义一个接口来让 Strategy 访问它的数据。</li>
+			</ul>
+  	</li>
+  </ul>
   
   <h1>协作</h1>
   
+  <ul>
+  	<li><p>Strategy 和 Context 相互作用以实现选定算法。</p></li>
+  	<li><p>Context 转发客户请求到 Strategy。</p></li>
+  </ul>
+  
   <h1>效果</h1>
+  
+  <ol>
+  	<li><p>定义相关算法系列。</p></li>
+  	<li><p>继承的一个替代方法。（创建 Context 子类）</p></li>
+  	<li><p>消除条件判断。</p></li>
+  	<li><p>选择实现。</p></li>
+  </ol>
   
   <h1>实现</h1>
   
+  <ol>
+  	<li><p>定义 Strategy 和 Context 接口。</p></li>
+  	<li><p>将 Strategy 作为模板参数（泛型）。</p></li>
+  	<li><p>使 Strategy 对象可选。（简化选择缺省行为）</p></li>
+  </ol>
+  
   <h1>优缺点</h1>
+  
+  <p>优点：</p>
+  <ol>
+  	<li><p>易于算法的切换、理解和扩展。</p></li>
+  </ol>
+  
+  <p>缺点：</p>
+  <ol>
+  	<li><p>客户需要了解各 Strategy 的差异。</p></li>
+  	<li><p>通信开销。（Context 传递的信息至少是所有 Strategy 的公共下界）</p></li>
+  	<li><p>Strategy 对象数目爆炸。（可共享对象减轻）</p></li>
+  </ol>
   
   <h1>其它说明</h1>
   
+  <p>JDK 中比较器、布局管理器、外观等都是策略模式的经典应用。</p>
+  
   <h1>相关模式</h1>
+  
+  <p>Flyweight，Strategy 对象是很好的轻量级对象。</p>
   
 </body>
 </html>
