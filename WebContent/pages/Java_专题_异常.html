@@ -190,6 +190,28 @@ catch(IOException e)
   外层的try语句块也只有一个职责，就是确保报告出现的错误。
   这种设计方式不仅清楚，而且还具有一个功能，就是将会报告 finally 子句中出现的错误。</p>
   
+  <h2>抛出受检异常</h2>
+  
+  <pre class="code"><code class="java">
+public class ThrowCheckedExceptionToUnckecked
+{
+	public static void main(String[] args)
+	{
+		doThrow(new SQLException());
+	}
+	
+	public static void doThrow(Exception e) {
+		ThrowCheckedExceptionToUnckecked.&lt;RuntimeException&gt; doThrow0(e);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static &lt;E extends Exception&gt; void doThrow0(Exception e) throws E {
+		throw (E) e;
+	}
+}  </code></pre>
+
+  <p>说明：对于受检异常捕获/抛出检查是由编译器进行的，而非JVM。而通过泛型的特殊应用，我们可以绕过编译器检查抛出受检异常。</p>
+  
   <h1>附录</h1>
   
   <h2>定义</h2>
