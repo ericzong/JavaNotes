@@ -69,6 +69,6 @@ mvn versions:set -DoldVersion=* -DnewVersion=0.1.2-SNAPSHOT -DprocessAllModules=
 # 确认修改
 mvn versions:commit
 # 撤销修改
-mvn versions:revertx
+mvn versions:revert
 ```
 
