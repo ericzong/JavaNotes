@@ -44,3 +44,8 @@ mvn dependency:tree
 mvn dependency:analyze
 ```
 
+> 分析依赖的命令结果中主要有两个部分。
+>
+> Used undeclared dependencies，项目中使用到但未显式声明的依赖。使用主要指 import 导入等，通过直接依赖传递引入，升级直接依赖时可能导致问题。
+>
+> Unused declared dependencies，项目中未使用但显式声明的依赖。理论上可以删除，但通常这些依赖是运行时所需的，删除前需要仔细地分析。
