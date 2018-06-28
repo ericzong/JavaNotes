@@ -72,6 +72,8 @@
 |          | post-site               |                                      |                        |
 |          | site-deploy             | maven-site-plugin:deploy             |                        |
 
+> 注：default 生命周期的阶段列出的是 jar 打包方式时的绑定。其他打包方式时的绑定详见[这里](http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Built-in_Lifecycle_Bindings)。
+
 # 反应堆裁剪选项
 
 | 选项 | 全称                  | 说明                           |
