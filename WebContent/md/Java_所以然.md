@@ -26,7 +26,7 @@ assert 条件:表达式
 
 ### 为什么限定符为 extends 而非 implements？
 
-<T extends Superclass> 表达式表示：T subtypeOf Superclass，但不希望引入一个新关键字。
+\<T extends Superclass\> 表达式表示：T subtypeOf Superclass，但不希望引入一个新关键字。
 
 T 即可以是类也可以是接口，从子类型的角度来说，extends 更接近要表达的意思。
 
