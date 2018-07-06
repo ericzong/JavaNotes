@@ -48,6 +48,10 @@ mvn clean deploy site-deploy
 
 插件的命令行参数是由插件参数的表达式（Expression）决定的，如果没有则参数只能在 POM 中配置。
 
+# 仓库
+
+本地仓库的布局：groupId/artifactId/version/artifactId-version.packaging。
+
 
 # 命令参考
 
