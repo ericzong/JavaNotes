@@ -30,6 +30,7 @@
 ## 自定义绑定插件目标
 
 ```xml
+<!-- package source code -->
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-source-plugin</artifactId>
@@ -44,9 +45,27 @@
         </execution>
     </executions>
 </plugin>
+<!-- package java API doc -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-javadoc-plugin</artifactId>
+    <version>3.0.1</version>
+    <configuration>
+        <aggregate>true</aggregate>
+    </configuration>
+    <executions>
+        <execution>
+            <id>attach-javadocs</id>
+            <phase>verify</phase>
+            <goals>
+                <goal>jar</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 ```
 
-## 聚合项目
+## 聚合
 
 ```xml
 ...
@@ -87,6 +106,115 @@
 父模块消除配置重复，不包含除 POM 之外的项目文件。
 
 Maven 默认父 POM 在上一层目录下。
+
+## 跳过测试
+
+```xml
+<!-- 跳过测试运行 -->
+<plugin>
+    ...
+    <artifactId>maven-surefire-plugin</artifactId>
+    ...
+    <configuration>
+        <skipTests>true</skipTests>
+    </configuration>
+</plugin>
+<!-- 跳过测试编译（显然也不会运行） -->
+<plugin>
+    ...
+    <artifactId>maven-compiler-plugin</artifactId>
+    ...
+    <configuration>
+        <skip>true</skip>
+    </configuration>
+</plugin>
+<plugin>
+    ...
+    <artifactId>maven-surefire-plugin</artifactId>
+    ...
+    <configuration>
+        <skip>true</skip>
+    </configuration>
+</plugin>
+```
+
+## 包含及排除测试用例
+
+```xml
+<plugin>
+    ...
+    <configuration>
+        <includes>
+            <include>**/*Tests.java</include>        
+        </includes>
+        <excludes>
+            <exclude>**/*TempTest.java</exclude>
+        </excludes>
+    </configuration>
+</plugin>
+```
+
+## profile
+
+```xml
+<profiles>
+    <profile>
+        <id>xxx</id>
+        <activation>
+            <!-- 自动激活，可选* -->
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <!-- 自定义属性 -->
+        <properties>...</properties>
+        <!-- 过滤属性 -->
+        <resources>
+            <resource>
+                <directory>...</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>...</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+    </profile>
+    <!-- 系统属性激活 -->
+    <profile>
+        <activation>
+            <property>
+                <name>xxx</name>
+                <!-- 属性值匹配，可选* -->
+                <value>TestEnv</value>
+            </property>
+        </activation>
+        ...
+    </profile>
+    <!-- 操作系统环境激活 -->
+    <profile>
+        <activation>
+            <os>
+                <name>Windows XP</name>
+                <family>Windows</family>
+                <arch>x86</arch>
+                <version>5.1.2600</version>
+            </os>
+        </activation>
+    </profile>
+    <!-- 文件存在激活 -->
+    <profile>
+        <activation>
+            <file>
+                <missing>xxx.xxx</missing>
+                <exists>yyy.yyy</exists>
+            </file>
+        </activation>
+    </profile>
+</profiles>
+```
+
+通过，mvn clean install -P\<profile-id\> 启用。
 
 # settings.xml 配置
 
@@ -162,7 +290,7 @@ Maven 默认父 POM 在上一层目录下。
 		</pluginRepositories>
 	</profile>
   </profiles>
-
+  <!-- 显示激活 -->
   <activeProfiles>
 	<activeProfile>jdk-1.8</activeProfile>
 	<activeProfile>nexus-local</activeProfile>

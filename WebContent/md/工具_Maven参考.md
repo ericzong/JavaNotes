@@ -83,3 +83,73 @@
 | -pl  | --projets \<arg\>     | 构建指定模块，模块间用逗号分隔 |
 | -rf  | -resume-from \<arg\>  | 从指定模块回复反应堆。         |
 
+# 测试
+
+测试类默认模式：
+
+1. \*\*/Test\*.java
+2. \*\*/\*Test.java
+3. \*\*/\*TestCase.java
+
+# Maven 属性
+
+| 属性类型     | 示例                                        |
+| ------------ | ------------------------------------------- |
+| 内置属性     | \$\{basedir\}, \$\{version\}                |
+| POM 属性     |                                             |
+| 自定义属性   |                                             |
+| Settings属性 | \$\{settings.localRepository\} （本地仓库） |
+| Java系统属性 | \$\{user.home\}，通过 mvn help:system 查询  |
+| 环境变量属性 | \$\{env.JAVA_HOME\}                         |
+
+# 激活 profile
+
+1. 命令行激活。mvn clean install -Pdev-x,dev-y
+2. settigns 文件显式激活。
+3. 系统属性激活。分为存在性激活和值匹配激活。注意，系统属性可通过命令行传入。
+4. 操作系统环境激活。
+5. 文件存在性激活。
+6. 默认激活。
+
+有任何一个 profile 通过默认激活外的其他任意一种方式被激活，所有默认激活配置失效。
+
+详见[配置](工具_Maven配置参考.md)。
+
+# 命令参考
+
+```maven
+# 生成项目骨架
+mvn archetype:generate
+# 查看已解析依赖（Resolved Dependency）
+mvn dependency:list
+# 查看依赖树
+mvn dependency:tree
+# 分析依赖
+mvn dependency:analyze
+# 清理编译部署
+mvn clean deploy site-deploy
+# 跳过测试
+mvn package -DskipTests
+# 跳过测试代码编译（跳过编译也就不会执行测试）
+mvn package -Dmaven.test.skip=true
+# 动态指定运行的测试用例，可使用通配符（*）及用逗号（,）分隔多个测试类
+mvn test -Dtest=XxxTest
+# 激活 profile
+mvn clean install -Pdev-x,dev-y
+# 查看当前激活的 profile
+mvn help:active-profiles
+# 查看当前所有 profile
+mvn help:all-profiles
+```
+
+> 分析依赖的命令结果中主要有两个部分。
+>
+> Used undeclared dependencies，项目中使用到但未显式声明的依赖。使用主要指 import 导入等，通过直接依赖传递引入，升级直接依赖时可能导致问题。
+>
+> Unused declared dependencies，项目中未使用但显式声明的依赖。理论上可以删除，但通常这些依赖是运行时所需的，删除前需要仔细地分析。
+
+# 杂项
+
+超级 POM 位置
+
+$MAVEN_HOME/lib/maven-model-builder-x.x.x.jar!/org/apache/maven/model/pom-4.0.0.xml。
