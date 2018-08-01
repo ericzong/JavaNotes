@@ -56,6 +56,12 @@ Spock 是一款用于 Java 和 Groovy 应用程序的测试和规范框架。它
 
 参考书籍：Java testing with spock
 
+## Tess4J
+
+一个 OCR 工具包。
+
+[官网](http://tess4j.sourceforge.net/)
+
 # AI
 
 ## N-Dimensional Arrays for Java (ND4J) 
