@@ -314,3 +314,56 @@ Maven 默认父 POM 在上一层目录下。
   </servers>
 ```
 
+# 第三方插件
+
+## 覆盖率 JaCoCo
+
+### Maven 插件配置
+
+```xml
+<plugin>
+	<groupId>org.jacoco</groupId>
+	<artifactId>jacoco-maven-plugin</artifactId>
+	<version>${jacoco.version}</version>
+	<executions>
+		<execution>
+			<id>prepare-agent</id>
+			<goals>
+				<goal>prepare-agent</goal>
+			</goals>
+		</execution>
+		<execution>
+			<id>report</id>
+			<phase>prepare-package</phase>
+			<goals>
+				<goal>report</goal>
+			</goals>
+		</execution>
+		<execution>
+			<id>post-unit-test</id>
+			<phase>test</phase>
+			<goals>
+				<goal>report</goal>
+			</goals>
+			<configuration>
+				<dataFile>target/jacoco.exec</dataFile>
+				<outputDirectory>target/jacoco-ut</outputDirectory>
+			</configuration>
+		</execution>
+	</executions>
+	<configuration>
+		<systemPropertyVariables>
+			<jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+		</systemPropertyVariables>
+	</configuration>
+</plugin>
+```
+
+### 资源
+
+* [官网](https://www.jacoco.org/)
+* [与IntelliJ IDEA集成](https://www.jetbrains.com/help/idea/code-coverage.html)
+* [JAVA代码覆盖率工具JaCoCo-原理篇](https://www.aliyun.com/jiaocheng/839260.html)
+* [Java 代码覆盖率工具 JaCoCo：实践篇](https://www.aliyun.com/jiaocheng/839261.html)
+* [Jacoco 代码覆盖率，监控WEB项目](https://www.aliyun.com/jiaocheng/872529.html)
+* [如何使用Jacoco远程统计tomcat服务的代码覆盖率](https://my.oschina.net/91jason/blog/491171)

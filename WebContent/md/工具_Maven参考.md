@@ -95,12 +95,12 @@
 
 | 属性类型     | 示例                                        |
 | ------------ | ------------------------------------------- |
-| 内置属性     | \$\{basedir\}, \$\{version\}                |
+| 内置属性     | \{basedir\}, \{version\}                |
 | POM 属性     |                                             |
 | 自定义属性   |                                             |
-| Settings属性 | \$\{settings.localRepository\} （本地仓库） |
-| Java系统属性 | \$\{user.home\}，通过 mvn help:system 查询  |
-| 环境变量属性 | \$\{env.JAVA_HOME\}                         |
+| Settings属性 | \{settings.localRepository\} （本地仓库） |
+| Java系统属性 | \{user.home\}，通过 mvn help:system 查询  |
+| 环境变量属性 | \{env.JAVA_HOME\}                         |
 
 # 激活 profile
 
