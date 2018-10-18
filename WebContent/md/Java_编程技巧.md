@@ -4,7 +4,7 @@
 
 “双括号初始化”（double brace initialization），用于创建匿名列表并添加元素。
 
-```
+```java
 invite(new ArrayList<String>() {{ add(“Eric”); add(“Zong”) }});
 ```
 
@@ -12,22 +12,22 @@ invite(new ArrayList<String>() {{ add(“Eric”); add(“Zong”) }});
 
 ## 双层捕获关闭流 
 
-```
+```java
 InputStream in = ...;
 try
 {
   try
   {
-    code that might throw exception
+    // code that might throw exception
   }
   finally
   {
-    In.close();
+    in.close();
   }
 }
 catch(IOException e)
 {
-  show error message
+  // show error message
 }
 ```
 
