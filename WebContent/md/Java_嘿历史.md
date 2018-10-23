@@ -20,4 +20,10 @@ Timestamp类继承自java.util.Date，而后者的equals方法使用一个instan
 
   自动装箱（autoboxing）：自动打包（autowrapping）或许更加合适，而“装箱（boxing）”这个词源自于C#。
 
- 
+ # 惯例
+
+## HelloWorld
+
+大多数语言的入门第一个程序就是“Hello, World”，其功能是简单输出“Hello, World”字符串（到屏幕、终端或者控制台）。
+
+这种简单的程序语言入门示例源自 Brian Kernighan 编写的《C 程序设计语言》，准确地说，这种形式的示例来自他本人早期写的一部 B 语言编程教程。随着 C 语言的广为流传，这种示例程序也被后来的其他语言的教程沿用。
