@@ -12,7 +12,7 @@ h2 {
 	font-size: 14px;
 }
 
-dt, .bold {
+dt, .bold, .def, .title {
 	font-weight: bold;
 }
 .notice, .comment {
