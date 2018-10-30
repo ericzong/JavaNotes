@@ -7,6 +7,7 @@
 3. Constructor.newInstance()
 4. Object.clone()
 5. 反序列化
+6. 对于 String 及基本类型封装类：字面量、表达式
 
 ## 数据类型
 

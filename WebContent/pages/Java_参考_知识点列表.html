@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Eric Zong">
+<title>Java 参考：知识点列表</title>
+<link type="text/css" rel="stylesheet" href="../css/common.css"  />
+<link type="text/css" rel="stylesheet" href="../css/fold.css"  />
+<link type="text/css" rel="stylesheet" href="../css/print.css" media="print" />
+<link type="text/css" rel="stylesheet" href="../css/title.css"  />
+<link type="text/css" rel="stylesheet" href="../css/tree.css" />
+<link type="text/css" rel="stylesheet" href="../css/highlight.css" />
+
+<script type="text/javascript" src="../js/title.js"></script>
+<script type="text/javascript" src="../js/highlight.pack.js"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+  
+  <h1>变量</h1>
+  
+  <p class="next bold">实例变量初始化时机</p>
+  <div class="textarea">
+    <ol>
+      <li>定义时</li>
+      <li>非静态初始化块内</li>
+      <li>构造器中</li>
+    </ol>
+    <p>说明：编译后，前两项的初始化语句都将提取到构造器中，并位于构造器所有语句之前，且保持源码中的顺序。</p>
+  </div>
+  <p class="next bold">类变量初始化时机</p>
+  <div class="textarea">
+    <ol>
+      <li>定义时</li>
+      <li>静态初始化块内</li>
+    </ol>
+    <p>说明：编译后，都将提取到静态初始化块中，两者保持源码中的顺序。</p>
+  </div>
+  
+  <p class="next bold">线程访问类变量的4种情况</p>
+  <div class="textarea">
+  <ol>
+    <li>未初始化类：当前线程初始化</li>
+    <li>当前线程正初始化类：递归请求</li>
+    <li>其他线程正初始化类：暂停</li>
+    <li>已初始化类：得到 field 值</li>
+  </ol>
+  </div>
+  
+  <p class="next bold">一个变量成为常量的条件</p>
+  <div class="textarea">
+  <ol>
+    <li>final 修饰</li>
+    <li>声明时赋值</li>
+    <li>基本数据类型或字符串</li>
+    <li>赋值表达式为字面量/基本算术运算表达式/字符串连接运算</li>
+    <li>赋值表达式没有访问普通变量和调用方法</li>
+  </ol>
+  </div>
+  
+</body>
+</html>
