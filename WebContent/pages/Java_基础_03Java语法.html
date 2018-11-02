@@ -18,7 +18,56 @@
 <body>
   <h1>数据类型</h1>
   
+  <p>Java 是面向对象的语言，因此，大多数数据类型是以类对象的形式呈现的，称为“引用类型”。</p>
+  <p>但是，Java 并不是一门纯粹的面向对象的语言，它还包括 8 种“基本数据类型”，或称“原始数据类型”。</p>
+  
+  <table>
+    <thead>
+      <tr>
+      	<th>数据类型</th>
+      	<th>长度</th>
+      </tr>
+    </thead>
+    <tbody>
+    	<tr>
+    		<td>boolean</td>
+    		<td>1 bit</td>
+    	</tr>
+    	<tr>
+    		<td>char</td>
+    		<td>2 byte</td>
+    	</tr>
+    	<tr>
+    		<td>byte</td>
+    		<td>1 byte</td>
+    	</tr>
+    	<tr>
+    		<td>short</td>
+    		<td>2 byte</td>
+    	</tr>
+    	<tr>
+    		<td>int</td>
+    		<td>4 byte</td>
+    	</tr>
+    	<tr>
+    		<td>long</td>
+    		<td>8 byte</td>
+    	</tr>
+    	<tr>
+    		<td>float</td>
+    		<td>4 byte</td>
+    	</tr>
+    	<tr>
+    		<td>double</td>
+    		<td>8 byte</td>
+    	</tr>
+    </tbody>
+  </table>
+  
   <h1>运算符</h1>
+  
+  <p>Java 中有丰富的运算符，因此，在复杂运算中，会涉及运算符的优先级和结合性的概念，
+    它们很难全部牢记。为了代码的可读性和可维护性，复杂运算中应使用圆括号明确计算顺序。</p>
   
   <p>复合赋值运算符的隐式类型转换可能导致结果高位被“截断”。</p>
   
@@ -67,9 +116,77 @@
   	<li>数字：’0’~’9’、某种语言中代表数字的任何字符。</li>
   </ul>
   
-  <h1>修饰符</h1>
+  <p>Java 标识符的命名有一些应当遵循的约定，但不强制。</p>
+  <p>通常而言，Java 标识符命名遵循驼峰命名，即组成标识符的每个单词首字母大写，
+    根据首字母是否大写又分为“大驼峰”和“小驼峰”。</p>
+  <table>
+    <thead>
+      <tr>
+      	<th>名称</th>
+      	<th>命名法</th>
+      	<th>构成</th>
+      	<th>示例</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>包</td>
+        <td>全小写</td>
+        <td>短小单词</td>
+        <td>java, lang</td>
+      </tr>
+      <tr>
+      	<td>类</td>
+      	<td>大驼峰</td>
+      	<td>名词</td>
+      	<td>System, StringBuffer</td>
+      </tr>
+      <tr>
+      	<td>接口</td>
+      	<td>大驼峰</td>
+      	<td>名词或形容词</td>
+      	<td>Runnable, AutoCloseable</td>
+      </tr>
+      <tr>
+      	<td>方法</td>
+      	<td>小驼峰</td>
+      	<td>动词</td>
+      	<td>wait, clone</td>
+      </tr>
+      <tr>
+      	<td>变量</td>
+      	<td>小驼峰</td>
+      	<td>名词</td>
+      	<td>firstName</td>
+      </tr>
+      <tr>
+      	<td>常量</td>
+      	<td>全大写，单词以下划线“_”分隔</td>
+      	<td>名词</td>
+      	<td>MAX_VALUE</td>
+      </tr>
+    </tbody>
+  </table>
   
   <h1>注释</h1>
+  
+  <p>Java 有 3 种注释类型：单行注释、多行注释、文档注释。</p>
+  <p>单行注释以“//”开始，直到本行结束。</p>
+  <pre class="code"><code class="java">
+// 这是单行注释</code></pre>
+  <p>多行注释以“/*”和“*/”包围多行形成注释块。</p>
+  <pre class="code"><code class="java">
+/*
+ * 这是一个多行注释
+ */ </code></pre>
+  <p>文档注释以“/**”和“*/”包围多行形式成注释。它与多行注释很像，只是它可以使用 javadoc 工具创建 API 文档。</p>
+  <pre class="code"><code class="java">
+/**
+ * 这是一个文档注释
+ * 会出现在生成的 API 文档中
+ */ </code></pre>
+
+  <p>需要注意的是，多行注释和文档注释都是以识别“*/”为结束的，换句话说，它们不能嵌套使用。</p>
   
   <h1>流程控制</h1>
   
@@ -96,8 +213,6 @@
   <div class="ext">
   	<p>贯穿现象很容易理解，形式上说，case 分支类似标签的概念，跳转到某个分支后除非 break 出 switch，否则会顺序执行。</p>
   </div>
-  
-  <h1>异常处理</h1>
   
   <h1>语法糖</h1>
   
