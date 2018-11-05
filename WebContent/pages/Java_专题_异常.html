@@ -54,19 +54,19 @@
 	<pre class="code"><code class="java">
 try
 {
-	// 可能抛出异常的代码
+    // 可能抛出异常的代码
 }
 catch(ExceptionType name)
 {
-	// 异常处理
+    // 异常处理
 }
 catch(ExceptionType2 name)
 {
-	// 异常处理
+    // 异常处理
 }
 finally
 {
-	// 无论是否异常均会执行的代码，如资源回收和释放等
+    // 无论是否异常均会执行的代码，如资源回收和释放等
 }</code></pre>
 
   <p class="next">Java 7加入多重捕获（multicatch）语法：</p>
@@ -176,18 +176,18 @@ try(AutoCloseableImp auto = ...)
 InputStream in = ...;
 try
 {
-  try
-  {
-    code that might throw exception
-  }
-  finally
-  {
-    In.close();
-  }
+    try
+    {
+        // code that might throw exception
+    }
+    finally
+    {
+        in.close();
+    }
 }
 catch(IOException e)
 {
-  show error message
+    // show error message
 }  </code></pre>
 
   <p>说明：内层的try语句块只有一个职责，就是确保关闭输入流。
@@ -199,19 +199,19 @@ catch(IOException e)
   <pre class="code"><code class="java">
 public class ThrowCheckedExceptionToUnckecked
 {
-	public static void main(String[] args)
-	{
-		doThrow(new SQLException());
-	}
-	
-	public static void doThrow(Exception e) {
-		ThrowCheckedExceptionToUnckecked.&lt;RuntimeException&gt; doThrow0(e);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static &lt;E extends Exception&gt; void doThrow0(Exception e) throws E {
-		throw (E) e;
-	}
+    public static void main(String[] args)
+    {
+        doThrow(new SQLException());
+    }
+    
+    public static void doThrow(Exception e) {
+        ThrowCheckedExceptionToUnckecked.&lt;RuntimeException&gt; doThrow0(e);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static &lt;E extends Exception&gt; void doThrow0(Exception e) throws E {
+        throw (E) e;
+    }
 }  </code></pre>
 
   <p>说明：对于受检异常捕获/抛出检查是由编译器进行的，而非JVM。而通过泛型的特殊应用，我们可以绕过编译器检查抛出受检异常。</p>
