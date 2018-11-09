@@ -18,8 +18,14 @@
 <body>
   <h1>字符串</h1>
   
+  <p>当能进行编译时优化时，String 使用“+”拼接的性能将比 StringBuilder.append() 更好。</p>
+  
+  <h1>数字</h1>
+  
+  <p>Integer 默认缓存了 -128~127 的对象，通过设置 JVM 启动参数 -Djava.lang.Integer.IntegerCache.high=n 可以设置。</p>
   
   <h1>数组</h1>
+  
   <p>所有数组均是可克隆的，即包含一个 public 的 clone 方法。</p>
   
   <h1>集合</h1>
