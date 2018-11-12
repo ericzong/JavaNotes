@@ -22,7 +22,16 @@
   
   <h1>数字</h1>
   
-  <p>Integer 默认缓存了 -128~127 的对象，通过设置 JVM 启动参数 -Djava.lang.Integer.IntegerCache.high=n 可以设置。</p>
+  <p>Integer 默认缓存了 -128~127 的对象，
+    通过设置 JVM 启动参数 
+    -Djava.lang.Integer.IntegerCache.high=n 
+    或
+    -XX:AutoBoxCacheMax=n
+    可以设置。</p>
+  <p>关于 Integer 的一个长期漏洞是：通过反射可以恶意修改 Integer 的 cache 属性，导致得到错误的装箱结果。</p>
+  <div class="ext">
+    <p>从 Java 9 开始，该修改限制更为严格。openjdk11 的运行情况来看，会有警告信息告知该修改，并说明未来将不允许此修改。</p>
+  </div>
   
   <h1>数组</h1>
   
@@ -40,10 +49,13 @@
   <p>keySet 既不是HashSet，也不是TreeSet，而是实现了Set接口的某个其他类的对象。</p>
   <p>当对键的唯一引用来自散列表条目时，WeakHashMap将与垃圾回收器协同工作一起删除键/值对。WeakHashMap使用弱引用（weak references）保存键。</p>
   
-  <h1>File</h1>
-  
-  
   <h1>IO</h1>
+  
+  <h2>FileChannel</h2>
+  
+  <p>FileChannel 是一个抽象类，不能实例化。需要调用 FileInputStream、FileOutputStream、RandomAccessFile
+  的 getChannel() 方法获取其实例。</p>
+  <p>FileChannel 可以为文件加锁，当且仅当该管道是可写的。</p>
   
   <h1>其他</h1>
   
