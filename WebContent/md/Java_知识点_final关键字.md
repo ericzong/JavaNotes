@@ -254,6 +254,46 @@ public static final String s = null;
 
 关键在于 null 不是常量表达式，因此 `s` 本身不是一个常量声明，所以修改后能被观察到新值。
 
+## 读取到 final 域缺省值
+
+final 域被初始化之前，存在被读取到其缺省值的可能。
+
+在《Java 解惑》一书中，有如下的示例展示了这种情况：
+
+```java
+import java.util.Calendar;
+
+public class Elvis {
+	public static final Elvis INSTANCE = new Elvis();
+	private final int beltSize;
+	private static final int CURRENT_YEAR = 
+		Calendar.getInstance().get(Calendar.YEAR);
+	
+	private Elvis() {
+		beltSize = CURRENT_YEAR - 1930;
+	}
+	
+	public int beltSize() {
+		return beltSize;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("Elvis wears a size " 
+                           + INSTANCE.beltSize() + " belt.");
+	}
+}
+```
+
+以上程序输出：Elvis wears a size -1930 belt.
+
+这个结果很反直觉，要清楚原因，大致需要知道以下几个知识点。
+
+* CURRENT_YEAR 不是常量。因此，不应期望第 10 行代码等效于当前年份与 1930 之差。
+* 域初始化是自上而下顺序执行的。INSTANCE 初始化时 CURRENT_YEAR 还没有初始化，仍为缺省值 0。
+* 类的循环初始化。Elvis 执行 main() 方法触发了类初始化。首先需要初始化域 INSTANCE，这需要实例化当前类。而构造器中访问了 CURRENT_YEAR，这又要求当前类初始化完成。然而，当前正在执行类初始化，因此这个递归的类初始化请求会被忽略。故取到 CURRENT_YEAR 的缺省值 0。进而在构造器中为 beltSize 赋值为 -1930。
+
+要修正这个错误，需要对静态域初始化器调整排序，使得初始化器出现在任何依赖于它的初始化器之前。即 CURRENT_YEAR 应置于 INSTANCE 之前。
+
 ---
 
 # 遗留问题
