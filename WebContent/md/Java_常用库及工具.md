@@ -1,14 +1,8 @@
 # 通用工具
 
-## java-design-patterns
+## 常用库
 
-设计模式的Java实现
-
-http://java-design-patterns.com/
-
-https://github.com/iluwatar/java-design-patterns
-
-## Guava
+### Guava
 
 Google的Java常用类库
 
@@ -16,13 +10,47 @@ https://github.com/google/guava
 
 > Guava 中文是石榴的意思，该项目是 Google 的一个开源项目，包含许多 Google 核心的 Java 常用库。
 
-## JVM-Sandbox
+## 文件处理
 
-AOP
+### Commons Configuration
+
+http://commons.apache.org/proper/commons-configuration/
+
+Commons Configuration提供了一个通用配置接口，使得一个Java程序能从各种输入源中读取配置数据。它提供对单值和多值配置参数的类型化访问。
+
+支持的输入源：
+
+* Properties files
+* XML documents
+* Windows INI files
+* Property list files (plist)
+* JNDI
+* JDBC Datasource
+* System properties
+* Applet parameters
+* Servlet parameters
+
+可使用builder创建配置对象，并可混合不同配置源。
+Configurations辅助类是工具入口，可以创建builder或是直接创建Configuration。
+Configuration 包含众多读取属性并转换为特定类型的方法，甚至可以将多个key相同的属性读取为List或数组，也可以生成指定key前缀的配置子集（不可变）。
+
+## AOP
+
+### JVM-Sandbox
 
 https://github.com/alibaba/JVM-Sandbox
 
 JVM 沙箱容器，一种基于 JVM 的非侵入式运行期 AOP 解决方案。
+
+## 理论实现
+
+### java-design-patterns
+
+设计模式的Java实现
+
+http://java-design-patterns.com/
+
+https://github.com/iluwatar/java-design-patterns
 
 # 数据处理
 
