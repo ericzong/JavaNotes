@@ -13,7 +13,7 @@ List 接口是有序列表的数据结构抽象。
       * Stack Ⓒ
   * CopyOnWriteArrayList Ⓒ
 
-# 实现（openjdk11）
+# 实现（OpenJDK11）
 
 ## ArrayList
 
