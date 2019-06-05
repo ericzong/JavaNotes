@@ -161,7 +161,7 @@ Node<E> node(int index) {
 
 ### 插入
 
-插入节点的操作都是通过 `linkLast()` 或 `linkFirst` 完成的，无非是修改节点的前驱和后继。
+插入节点的操作都是通过 `linkLast()` 或 `linkBefore()` 完成的，无非是修改节点的前驱和后继。
 
 如果清楚数据结构的知识的话，应该能很好理解。
 
@@ -390,3 +390,4 @@ private static int hugeCapacity(int minCapacity) {
 可见，当扩容大小超过 `MAX_ARRAY_SIZE` 时，容量可以达到 `Integer.MAX_VALUE`。
 
 既然容量可以达到 `Integer.MAX_VALUE`，那预留 8 字节有什么必要呢？这个问题尚没看到合理的解释。
+
